@@ -1,22 +1,25 @@
-import Sidebar from "./Sidebar";
-import Header from "./Header";
-import Board from "./Board";
+import { createBrowserRouter, RouterProvider } from "react-router";
+import SignInPage from "./features/auth/components/SignInPage";
+import HomePage from "./HomePage";
+
+const appRouter = createBrowserRouter([
+  {
+    path: "/",
+    element: <HomePage/>
+  },
+  {
+    path: "/sign-in",
+    element: <SignInPage/>
+  }
+])
+
 
 export default function App() {
-  return (
-    <div className="flex">
-      {/* Sidebar */}
-      <Sidebar />
 
-      {/* Main Section */}
-      <div className="flex-1">
-        <Header />
 
-        {/* Board */}
-        <div className="p-6 bg-gray-100 min-h-screen">
-          <Board/>
-        </div>
-      </div>
+  return(
+    <div className="App">
+      <RouterProvider router={appRouter}/>
     </div>
-  );
+  )
 }

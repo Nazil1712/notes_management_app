@@ -23,6 +23,12 @@ export default function Header() {
     { id: "row", label: "Row View", icon: <img src="/Row.png" alt="" /> },
   ];
 
+  const rightFilters = [
+    { id: "grid", label: "Grid View", icon: <img src="/Grid.png" alt="" /> },
+    { id: "filter", label: "Filter", icon: <img src="/Filter.png" alt="" /> },
+    { id: "sort", label: "Sort", icon: <img src="/Sort.png" alt="" /> },
+  ];
+
   const [selected, setSelected] = useState("list");
 
   return (
@@ -109,9 +115,11 @@ export default function Header() {
               <h1 className="text-2xl font-bold text-gray-800">
                 Project PlanetX
               </h1>
-              <div className="flex items-center gap-4 rounded-full bg-background-color 
-              w-fit mx-auto text-sm font-medium p-1">
-                {views.map(({ id, label, icon },i) => (
+              <div
+                className="flex items-center gap-4 rounded-full bg-background-color 
+              w-fit mx-auto text-sm font-medium p-1"
+              >
+                {views.map(({ id, label, icon }, i) => (
                   <button
                     key={id}
                     onClick={() => setSelected(id)}
@@ -121,8 +129,8 @@ export default function Header() {
                                 ? "bg-white shadow h-8 rounded-full"
                                 : "text-gray-600 hover:text-gray-800"
                             }
-                            ${i==0? 'ml-2':''}
-                            ${i==views.length-1? 'mr-2':''}
+                            ${i == 0 ? "ml-2" : ""}
+                            ${i == views.length - 1 ? "mr-2" : ""}
                             `}
                   >
                     {icon}
@@ -134,7 +142,7 @@ export default function Header() {
           </div>
 
           {/* Right Side Controls */}
-          <div className="flex items-center space-x-3">
+          {/* <div className="flex items-center space-x-3">
             <button className="flex items-center space-x-1 px-3 py-1 text-sm text-gray-600 rounded-lg hover:bg-gray-100">
               <Grid size={14} /> <span>Grid View</span>
             </button>
@@ -145,6 +153,24 @@ export default function Header() {
               <span>⇅</span> <span>Sort</span>
             </button>
             <button className="px-4 py-2 bg-button-blue hover:bg-indigo-700 text-white text-sm font-medium rounded-4xl">
+              <span className="flex gap-2">
+                Export Data <img src="/Export.png" alt="Upload symbol" />
+              </span>
+            </button>
+          </div> */}
+          <div className="flex flex-col items-center space-x-3">
+            <div className="flex">
+              {rightFilters.map(({ id, label, icon }) => (
+                <button
+                  key={id}
+                  className="flex items-center space-x-1 px-3 py-1 text-sm text-gray-600 rounded-lg hover:bg-gray-100"
+                >
+                  {icon} <span>{label}</span>
+                </button>
+              ))}
+            </div>
+
+            <button className="px-4 py-2 bg-button-blue hover:bg-indigo-700 text-white text-sm font-medium rounded-4xl mt-2 ml-25">
               <span className="flex gap-2">
                 Export Data <img src="/Export.png" alt="Upload symbol" />
               </span>

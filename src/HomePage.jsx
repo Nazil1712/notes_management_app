@@ -13,7 +13,7 @@ const HomePage = () => {
           <Header />
   
           {/* Board */}
-          <div className="p-6 bg-gray-100 min-h-screen">
+          <div className="">
             <Board/>
           </div>
         </div>

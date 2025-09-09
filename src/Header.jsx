@@ -56,7 +56,7 @@ export default function Header() {
               </span>
               <ChevronRight size={25} className="text-gray-300" />
             </span>
-            <span className="text-indigo-600 font-medium flex justify-center items-center gap-1">
+            <span className="text-indigo-600 font-bold flex justify-center items-center gap-1">
               {" "}
               <img
                 src="/Sphere.png"

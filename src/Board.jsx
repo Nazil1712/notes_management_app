@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { deleteTask, fetchAllTasks } from "./app/tasks/taskSlice";
 import TaskForm from "./app/TaskForm";
@@ -29,14 +29,34 @@ const Tag = ({ label }) => {
   );
 };
 
-const TaskCard = ({ task, isOpen, onToggle }) => {
+const TaskCard = ({ task, isOpen, onToggle, setOpenDropdownId }) => {
   const [showPopUp, setShowPopUp] = useState(null);
+  const [showForm, setShowForm] = useState(false);
   const dispatch = useDispatch();
-  // const [open, setOpen] = useState(false);
+  const dropdownRef = useRef(null);
 
-  const handleDelete = (id) =>{ 
-    dispatch(deleteTask(id))
-  }
+  const handleDelete = (id) => {
+    dispatch(deleteTask(id));
+  };
+
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setOpenDropdownId(null); // close dropdown
+      }
+    };
+
+    if (isOpen) {
+      document.addEventListener("mousedown", handleClickOutside);
+    } else {
+      document.removeEventListener("mousedown", handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [isOpen, setOpenDropdownId]);
 
   return (
     <>
@@ -47,7 +67,7 @@ const TaskCard = ({ task, isOpen, onToggle }) => {
           </div>
 
           {/* Ellipsis button */}
-          <div className="relative">
+          <div className="relative" ref={dropdownRef}>
             <button
               onClick={onToggle}
               className="hover:bg-gray-100 rounded-full p-1"
@@ -69,7 +89,10 @@ const TaskCard = ({ task, isOpen, onToggle }) => {
             {isOpen && (
               <div className="absolute right-0 top-full mt-2 w-36 bg-white border rounded-lg shadow-lg z-10">
                 <ul className="text-sm">
-                  <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer">
+                  <li
+                    className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
+                    onClick={()=>setShowForm(true)}
+                  >
                     Edit
                   </li>
                   <li
@@ -120,11 +143,25 @@ const TaskCard = ({ task, isOpen, onToggle }) => {
           </div>
         </div>
       </div>
+
+      {showForm && (
+        <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
+          <div className="bg-white rounded-xl shadow-lg p-6 w-[70%] max-w-md">
+            <TaskForm
+              mode="update"
+              onCancel={() => setShowForm(false)}
+              setShowForm={setShowForm}
+              title={task.title}
+              taskData={task}
+            />
+          </div>
+        </div>
+      )}
     </>
   );
 };
 
-const Column = ({ title, tasks, openDropdownId, onToggle }) => {
+const Column = ({ title, tasks, openDropdownId, onToggle, setOpenDropdownId }) => {
   const [showForm, setShowForm] = useState(false);
 
   return (
@@ -155,6 +192,7 @@ const Column = ({ title, tasks, openDropdownId, onToggle }) => {
               task={t}
               isOpen={openDropdownId === t.id}
               onToggle={() => onToggle(t.id)}
+              setOpenDropdownId={setOpenDropdownId}
             />
           ))}
         </div>
@@ -185,12 +223,13 @@ export default function Board() {
     setOpenDropdownId((prev) => (prev === id ? null : id));
   };
   const backEndTasks = useSelector((state) => state.tasks.tasks);
+  const taskUpdated  = useSelector((state) => state.tasks.taskUpdated);
 
   console.log("tasks", backEndTasks);
 
   useEffect(() => {
     dispatch(fetchAllTasks());
-  }, [dispatch,backEndTasks]);
+  }, [dispatch, taskUpdated]);
 
   return (
     <>
@@ -204,18 +243,21 @@ export default function Board() {
               tasks={backEndTasks.toDoTasks}
               openDropdownId={openDropdownId}
               onToggle={handleToggle}
+              setOpenDropdownId={setOpenDropdownId}
             />
             <Column
               title="In Progress"
               tasks={backEndTasks.inProgressTasks}
               openDropdownId={openDropdownId}
               onToggle={handleToggle}
+              setOpenDropdownId={setOpenDropdownId}
             />
             <Column
               title="Completed"
               tasks={backEndTasks.completedTasks}
               openDropdownId={openDropdownId}
               onToggle={handleToggle}
+              setOpenDropdownId={setOpenDropdownId}
             />
           </div>
         </div>

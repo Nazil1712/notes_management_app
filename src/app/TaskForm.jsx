@@ -1,25 +1,45 @@
 import React from "react";
 import { useForm } from "react-hook-form";
 import { useDispatch } from "react-redux";
-import { addTask } from "./tasks/taskSlice";
+import { addTask, fetchAllTasks, updateTask } from "./tasks/taskSlice";
 
-export default function TaskForm({ onCancel , setShowForm, mode = "create", title}) {
+export default function TaskForm({
+  onCancel,
+  setShowForm,
+  mode = "create",
+  title,
+  taskData = {},
+}) {
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm({
+    defaultValues: {
+      title: taskData.title ,
+      tag: taskData.tag,
+      users: taskData.users,
+      status: taskData.status || title,
+      description: taskData.description,
+    },
   });
 
   const dispatch = useDispatch();
 
   return (
-    <form onSubmit={handleSubmit((data)=>{
-      console.log("New Task Data",data)
-      setShowForm(false)
-      dispatch(addTask(data))
+    <form
+      onSubmit={handleSubmit((data) => {
+        console.log("New Task Data", data);
+        setShowForm(false);
 
-    })} className="space-y-4">
+        if (mode == "create") {
+          dispatch(addTask(data));
+        } else {
+          dispatch(updateTask({ id: taskData.id, updates:data }));
+        }
+      })}
+      className="space-y-4"
+    >
       {/* Task Name */}
       <div>
         <label className="block text-sm font-medium">Task Title</label>
@@ -68,7 +88,6 @@ export default function TaskForm({ onCancel , setShowForm, mode = "create", titl
         <select
           {...register("users", { required: "Select an users" })}
           className="mt-1 block w-full rounded-md border px-3 py-2"
-          
         >
           <option value="">-- Select --</option>
           <option value="john">John</option>
@@ -85,7 +104,6 @@ export default function TaskForm({ onCancel , setShowForm, mode = "create", titl
         <select
           {...register("status")}
           className="mt-1 block w-full rounded-md border px-3 py-2"
-          value={title}
         >
           <option value="To Do">To Do</option>
           <option value="In Progress">In Progress</option>

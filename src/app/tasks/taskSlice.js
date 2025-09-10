@@ -13,6 +13,7 @@ const initialState = {
   },
   loading: false,
   error: null,
+  taskUpdated: false
 };
 
 // Fetch all tasks
@@ -41,32 +42,35 @@ export const deleteTask = createAsyncThunk(
   }
 ); 
 
-/* 
-// Update task
+
 export const updateTask = createAsyncThunk(
   "tasks/updateTask",
   async ({ id, updates }) => {
-    const response = await axios.put(`${API_URL}/${id}`, updates);
+    console.log("Updates",updates)
+    const response = await axios.patch(`${API_URL}/api/tasks/${id}`, updates);
     return response.data;
   }
 );
-*/
 
 
 const tasksSlice = createSlice({
   name: "tasks",
   initialState,
-  reducers: {},
+  reducers: {
+    setTaskUpdated: (state, action) => {
+      state.taskUpdated = action.payload;
+    },
+  },
   extraReducers: (builder) => {
     builder
       // Fetch
       .addCase(fetchAllTasks.pending, (state) => {
         state.loading = true;
+        state.taskUpdated = false;
       })
       .addCase(fetchAllTasks.fulfilled, (state, action) => {
         state.loading = false;
         state.tasks = action.payload;
-        console.log("Action payload",action.payload)
       })
       .addCase(fetchAllTasks.rejected, (state, action) => {
         state.loading = false;
@@ -84,6 +88,8 @@ const tasksSlice = createSlice({
         } else if (newTask.status === "Completed") {
           state.tasks.completedTasks.push(newTask);
         }
+
+        state.taskUpdated = true;
       })
       .addCase(addTask.rejected, (state, action) => {
         state.loading = false;
@@ -93,22 +99,33 @@ const tasksSlice = createSlice({
         state.loading = true;
       })
       .addCase(deleteTask.fulfilled, (state, action) => {
-        state.tasks = state.tasks.filter((t) => t.id !== action.payload);
+        // state.tasks = state.tasks.filter((t) => t.id !== action.payload);
+        state.taskUpdated = true;
       })
       .addCase(deleteTask.rejected, (state, action) => {
         state.loading = false;
         state.error = action.error.message;
       })
-      /*
-      // Update
+      .addCase(updateTask.pending, (state) => {
+        state.loading = true;
+      })
       .addCase(updateTask.fulfilled, (state, action) => {
-        const index = state.tasks.findIndex((t) => t.id === action.payload.id);
+        /* const index = state.tasks.findIndex((t) => t.id === action.payload.id);
         if (index !== -1) {
           state.tasks[index] = action.payload;
-        }
-      })*/
+        } */
+        state.taskUpdated = true;
+
+      })
+      .addCase(updateTask.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error.message;
+      })
       
   },
 });
+
+export const {setTaskUpdated} = tasksSlice.actions;
+
 
 export default tasksSlice.reducer;

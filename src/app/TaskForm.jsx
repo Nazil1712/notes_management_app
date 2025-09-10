@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { useForm } from "react-hook-form";
 import { useDispatch } from "react-redux";
 import { addTask } from "./tasks/taskSlice";
@@ -126,13 +126,13 @@ export default function TaskForm({ onCancel , setShowForm, mode = "create", titl
         <button
           type="button"
           onClick={onCancel}
-          className="px-4 py-2 rounded-md border bg-white hover:bg-gray-50"
+          className="px-4 py-2 rounded-4xl border bg-white hover:bg-gray-50"
         >
           Cancel
         </button>
         <button
           type="submit"
-          className="px-4 py-2 rounded-md bg-blue-600 text-white hover:bg-blue-700"
+          className="px-4 py-2 rounded-4xl bg-button-blue text-white hover:bg-indigo-700"
         >
           {mode === "create" ? "Create Task" : "Save Changes"}
         </button>

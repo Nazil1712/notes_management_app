@@ -33,6 +33,14 @@ export const addTask = createAsyncThunk(
   }
 );
 
+export const deleteTask = createAsyncThunk(
+  "tasks/deleteTask", 
+  async (id) => {
+    await axios.delete(`${API_URL}/api/tasks/${id}`);
+    return id;
+  }
+); 
+
 /* 
 // Update task
 export const updateTask = createAsyncThunk(
@@ -42,12 +50,7 @@ export const updateTask = createAsyncThunk(
     return response.data;
   }
 );
-
-// Delete task
-export const deleteTask = createAsyncThunk("tasks/deleteTask", async (id) => {
-  await axios.delete(`${API_URL}/${id}`);
-  return id;
-}); */
+*/
 
 
 const tasksSlice = createSlice({
@@ -86,6 +89,16 @@ const tasksSlice = createSlice({
         state.loading = false;
         state.error = action.error.message;
       })
+      .addCase(deleteTask.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(deleteTask.fulfilled, (state, action) => {
+        state.tasks = state.tasks.filter((t) => t.id !== action.payload);
+      })
+      .addCase(deleteTask.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error.message;
+      })
       /*
       // Update
       .addCase(updateTask.fulfilled, (state, action) => {
@@ -93,11 +106,8 @@ const tasksSlice = createSlice({
         if (index !== -1) {
           state.tasks[index] = action.payload;
         }
-      })
-      // Delete
-      .addCase(deleteTask.fulfilled, (state, action) => {
-        state.tasks = state.tasks.filter((t) => t.id !== action.payload);
-      }); */
+      })*/
+      
   },
 });
 

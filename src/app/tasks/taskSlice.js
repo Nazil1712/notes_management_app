@@ -6,7 +6,11 @@ import axios from "axios";
 const API_URL = import.meta.env.VITE_API_URL;
 
 const initialState = {
-  tasks: null,
+  tasks: {
+    toDoTasks: [],
+    inProgressTasks: [],
+    completedTasks: []
+  },
   loading: false,
   error: null,
 };
@@ -20,12 +24,16 @@ export const fetchAllTasks = createAsyncThunk(
   }
 );
 
-/* // Add new task
-export const addTask = createAsyncThunk("tasks/addTask", async (taskData) => {
-  const response = await axios.post(API_URL, taskData);
+export const addTask = createAsyncThunk(
+  "tasks/addTask",
+  async (taskData) => {
+    // console.log(taskData)
+    const response = await axios.post(`${API_URL}/api/tasks`, taskData);
   return response.data;
-});
+  }
+);
 
+/* 
 // Update task
 export const updateTask = createAsyncThunk(
   "tasks/updateTask",
@@ -40,6 +48,7 @@ export const deleteTask = createAsyncThunk("tasks/deleteTask", async (id) => {
   await axios.delete(`${API_URL}/${id}`);
   return id;
 }); */
+
 
 const tasksSlice = createSlice({
   name: "tasks",
@@ -59,11 +68,25 @@ const tasksSlice = createSlice({
       .addCase(fetchAllTasks.rejected, (state, action) => {
         state.loading = false;
         state.error = action.error.message;
-      });
-    /* // Add
-      .addCase(addTask.fulfilled, (state, action) => {
-        state.tasks.push(action.payload);
       })
+      .addCase(addTask.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(addTask.fulfilled, (state, action) => {
+        const newTask = action.payload;
+        if (newTask.status === "To Do") {
+          state.tasks.toDoTasks.push(newTask);
+        } else if (newTask.status === "In Progress") {
+          state.tasks.inProgressTasks.push(newTask);
+        } else if (newTask.status === "Completed") {
+          state.tasks.completedTasks.push(newTask);
+        }
+      })
+      .addCase(addTask.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error.message;
+      })
+      /*
       // Update
       .addCase(updateTask.fulfilled, (state, action) => {
         const index = state.tasks.findIndex((t) => t.id === action.payload.id);

@@ -12,7 +12,7 @@ export default function Sidebar() {
 
   return (
     <div
-      className="h-screen w-16 bg-white border-r border-gray-300 flex flex-col 
+      className="h-screen w-18 bg-white border-r border-gray-300 flex flex-col 
      items-center justify-between"
     >
       <div>
@@ -58,7 +58,7 @@ export default function Sidebar() {
         <button className="p-2 hover:bg-indigo-100 rounded-lg">
           <img src="/Settings.png" alt="" />
         </button>
-        <img src="/currentUserAvatar.png" alt="User" className="h-10 w-10 rounded-full border" />
+        {/* <img src="/currentUserAvatar.png" alt="User" className="h-10 w-10 rounded-full border" /> */}
       </div>
     </div>
   );

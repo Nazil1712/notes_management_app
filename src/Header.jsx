@@ -116,8 +116,8 @@ export default function Header() {
             </div>
 
             {/* Title & View Buttons */}
-            <div className="flex flex-col gap-2 mb-4">
-              <h1 className="text-2xl font-bold text-gray-800">
+            <div className="flex flex-col gap-3 mb-4">
+              <h1 className="text-2xl font-extrabold text-gray-800">
                 Project PlanetX
               </h1>
               <div
@@ -147,22 +147,6 @@ export default function Header() {
           </div>
 
           {/* Right Side Controls */}
-          {/* <div className="flex items-center space-x-3">
-            <button className="flex items-center space-x-1 px-3 py-1 text-sm text-gray-600 rounded-lg hover:bg-gray-100">
-              <Grid size={14} /> <span>Grid View</span>
-            </button>
-            <button className="flex items-center space-x-1 px-3 py-1 text-sm text-gray-600 rounded-lg hover:bg-gray-100">
-              <Filter size={14} /> <span>Filter</span>
-            </button>
-            <button className="flex items-center space-x-1 px-3 py-1 text-sm text-gray-600 rounded-lg hover:bg-gray-100">
-              <span>⇅</span> <span>Sort</span>
-            </button>
-            <button className="px-4 py-2 bg-button-blue hover:bg-indigo-700 text-white text-sm font-medium rounded-4xl">
-              <span className="flex gap-2">
-                Export Data <img src="/Export.png" alt="Upload symbol" />
-              </span>
-            </button>
-          </div> */}
           <div className="flex flex-col items-center space-x-3">
             <div className="flex">
               {rightFilters.map(({ id, label, icon }) => (

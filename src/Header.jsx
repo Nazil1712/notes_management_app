@@ -70,7 +70,10 @@ export default function Header() {
           {/* Right Side */}
           <div className="flex items-center space-x-4">
             {/* Search */}
-            <Search className="h-5 w-5 text-gray-500 cursor-pointer" />
+            {/* <Search className="h-5 w-5 text-gray-500 cursor-pointer" /> */}
+            <div>
+              <img src="/searchIcon.png" alt="" />
+            </div>
 
             {/* Avatars */}
             <div className="flex -space-x-2">
@@ -91,9 +94,11 @@ export default function Header() {
             </div>
 
             {/* Invite Button */}
-            <button className="flex items-center space-x-1 px-3 py-1.5 bg-gray-100 hover:bg-gray-200 rounded-lg text-sm font-medium">
+            <button className="flex items-center space-x-1 px-3 py-1.5 hover:bg-gray-200 rounded-4xl text-sm font-medium border border-gray-300 ">
               <span>Invite</span>
-              <span className="text-lg">+</span>
+              <span className="">
+                <img src="/plusIcon.png" alt="" className="w-4 h-4" />
+              </span>
             </button>
           </div>
         </div>
@@ -170,7 +175,7 @@ export default function Header() {
               ))}
             </div>
 
-            <button className="px-4 py-2 bg-button-blue hover:bg-indigo-700 text-white text-sm font-medium rounded-4xl mt-2 ml-25">
+            <button className="px-4 py-3 bg-button-blue hover:bg-indigo-700 text-white text-sm font-medium rounded-4xl mt-2 ml-25">
               <span className="flex gap-2">
                 Export Data <img src="/Export.png" alt="Upload symbol" />
               </span>

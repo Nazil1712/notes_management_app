@@ -2,103 +2,6 @@ import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchAllTasks } from "./app/tasks/taskSlice";
 
-const tasks = {
-  todo: [
-    {
-      title: "UI/UX Design in the age of AI",
-      tag: "Important",
-      progress: 0,
-      comments: 11,
-      views: 187,
-      users: ["A", "B"],
-    },
-    {
-      title: "Responsive Website Design for 23 more clients",
-      tag: "Meh",
-      progress: 0,
-      comments: 32,
-      views: 115,
-      users: ["C", "D", "E"],
-    },
-    {
-      title: "Blog Copywriting (Low priority 😅)",
-      tag: "OK",
-      progress: 0,
-      comments: 987,
-      views: "21.8K",
-      users: ["F"],
-    },
-    {
-      title: "Landing page for Azunyan senpai",
-      tag: "Not that important",
-      progress: 0,
-      comments: 5,
-      views: 11,
-      users: ["G"],
-    },
-  ],
-  inProgress: [
-    {
-      title: "Machine Learning Progress",
-      tag: "Important",
-      progress: 52,
-      comments: 11,
-      views: 187,
-      users: ["A", "B"],
-    },
-    {
-      title: "Learn Computer Science",
-      tag: "Meh",
-      progress: 30,
-      comments: 32,
-      views: 115,
-      users: ["C", "D", "E"],
-    },
-  ],
-  completed: [
-    {
-      title: "User flow confirmation for fintech App",
-      tag: "Important",
-      progress: 100,
-      comments: 11,
-      views: "2.2K",
-      users: ["A", "B"],
-    },
-    {
-      title: "Do some usual chores",
-      tag: "High Priority",
-      progress: 100,
-      comments: 1,
-      views: 87,
-      users: ["C"],
-    },
-    {
-      title: "Write a few articles for slothUI",
-      tag: "OK",
-      progress: 100,
-      comments: 987,
-      views: "21.8K",
-      users: ["D"],
-    },
-    {
-      title: "Transform into a cyborg",
-      tag: "OK",
-      progress: 100,
-      comments: 987,
-      views: "21.8K",
-      users: ["E", "F"],
-    },
-    {
-      title: "Design 100 landing page for client",
-      tag: "Not that important",
-      progress: 100,
-      comments: 5,
-      views: 11,
-      users: ["G"],
-    },
-  ],
-};
-
 const dotsByStatus = {
   "To Do": "bg-button-blue rounded-full w-2 h-2",
   "In Progress": "bg-orange rounded-full w-2 h-2",
@@ -138,7 +41,7 @@ const TaskCard = ({ task }) => (
             ? "bg-button-blue"
             : "bg-orange"
         }`}
-        style={{ width: `${task.progress == 0 ? 3 : task.progress}%` }}
+        style={{ width: `${task.progress == 0 ? 2 : task.progress}%` }}
       ></div>
     </div>
 
@@ -158,7 +61,7 @@ const TaskCard = ({ task }) => (
 );
 
 const Column = ({ title, tasks }) => (
-  <div className="w-80 flex-shrink-0 bg-background-card-background p-4 rounded-xl border border-gray-200">
+  <div className="w-[30vw] flex-shrink-0 bg-background-card-background p-4 rounded-xl border border-gray-200">
     <div className="flex justify-between items-center mb-4">
       <div className="flex items-center gap-2">
         <p className={`${dotsByStatus[title]}`}></p>
@@ -192,12 +95,18 @@ export default function Board() {
   }, [dispatch]);
 
   return (
-    <div className="bg-white p-7">
-      <div className="flex space-x-6 overflow-x-auto">
-        <Column title="To Do" tasks={tasks.todo} />
-        <Column title="In Progress" tasks={tasks.inProgress} />
-        <Column title="Completed" tasks={tasks.completed} />
-      </div>
-    </div>
+    <>
+      {backEndTasks == null ? (
+        "Loading"
+      ) : (
+        <div className="bg-white p-7">
+          <div className="flex space-x-6 overflow-x-auto">
+            <Column title="To Do" tasks={backEndTasks.toDoTasks} />
+            <Column title="In Progress" tasks={backEndTasks.inProgressTasks} />
+            <Column title="Completed" tasks={backEndTasks.completedTasks} />
+          </div>
+        </div>
+      )}
+    </>
   );
 }

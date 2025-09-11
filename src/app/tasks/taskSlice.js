@@ -98,7 +98,7 @@ const tasksSlice = createSlice({
       .addCase(deleteTask.pending, (state) => {
         state.loading = true;
       })
-      .addCase(deleteTask.fulfilled, (state, action) => {
+      .addCase(deleteTask.fulfilled, (state) => {
         // state.tasks = state.tasks.filter((t) => t.id !== action.payload);
         state.taskUpdated = true;
       })
@@ -109,7 +109,7 @@ const tasksSlice = createSlice({
       .addCase(updateTask.pending, (state) => {
         state.loading = true;
       })
-      .addCase(updateTask.fulfilled, (state, action) => {
+      .addCase(updateTask.fulfilled, (state) => {
         /* const index = state.tasks.findIndex((t) => t.id === action.payload.id);
         if (index !== -1) {
           state.tasks[index] = action.payload;

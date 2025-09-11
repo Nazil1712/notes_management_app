@@ -1,7 +1,7 @@
 import React from "react";
 import { useForm } from "react-hook-form";
 import { useDispatch } from "react-redux";
-import { addTask, fetchAllTasks, updateTask } from "./tasks/taskSlice";
+import { addTask, updateTask } from "./tasks/taskSlice";
 
 export default function TaskForm({
   onCancel,

@@ -1,5 +1,3 @@
-import { faUpload } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   ChevronRight,
   Search,
@@ -30,6 +28,16 @@ export default function Header() {
   ];
 
   const [selected, setSelected] = useState("list");
+
+  const avatarsList = [
+    "/avatar-39.png",
+    "/avatar-40.png",
+    "/avatar-41.png",
+    "/avatar-42.png",
+    "/avatar-43.png",
+    "/avatar-44.png",
+    "/avatar-45.png",
+  ]
 
   return (
     <div className="w-full border-b border-gray-300 ">
@@ -77,13 +85,7 @@ export default function Header() {
 
             {/* Avatars */}
             <div className="flex -space-x-2">
-              {[
-                "https://i.pravatar.cc/32?img=1",
-                "https://i.pravatar.cc/32?img=2",
-                "https://i.pravatar.cc/32?img=3",
-                "https://i.pravatar.cc/32?img=4",
-                "https://i.pravatar.cc/32?img=5",
-              ].map((url, i) => (
+              {avatarsList.map((url, i) => (
                 <img
                   key={i}
                   src={url}

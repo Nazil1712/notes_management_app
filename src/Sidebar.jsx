@@ -24,26 +24,7 @@ export default function Sidebar() {
         </div>
 
         {/* Middle Navigation Icons */}
-        {/* <div className="flex flex-col space-y-6">
-          <button className="p-2 hover:bg-indigo-100 rounded-lg">
-            <img src="/Home.png" alt="" />
-          </button>
-          <button className="p-2 hover:bg-indigo-100 rounded-lg">
-            <img src="/Progress.png" alt="" />
-          </button>
-          <button className="p-2 hover:bg-indigo-100 rounded-lg">
-            <img src="/People.png" alt="" />
-          </button>
-          <button className="p-2 hover:bg-indigo-100 rounded-lg">
-            <img src="/Calendar.png" alt="" />
-          </button>
-          <button className="p-2 hover:bg-indigo-100 rounded-lg">
-            <img src="/Thunder.png" alt="" />
-          </button>
-          <button className="p-2 hover:bg-indigo-100 rounded-lg">
-            <img src="/Bell.png" alt="" />
-          </button>
-        </div> */}
+        
         <div className="flex flex-col space-y-6">
           {navItems.map((item) => (
             <button className="p-2 hover:bg-gray-100 rounded-4xl" key={item.label}>
@@ -58,7 +39,7 @@ export default function Sidebar() {
         <button className="p-2 hover:bg-indigo-100 rounded-lg">
           <img src="/Settings.png" alt="" />
         </button>
-        {/* <img src="/currentUserAvatar.png" alt="User" className="h-10 w-10 rounded-full border" /> */}
+        <img src="/avatar-40.png" alt="User" className="h-10 w-10 rounded-full border" />
       </div>
     </div>
   );

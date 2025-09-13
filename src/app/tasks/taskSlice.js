@@ -6,11 +6,7 @@ import axios from "axios";
 const API_URL = import.meta.env.VITE_API_URL;
 
 const initialState = {
-  tasks: {
-    toDoTasks: [],
-    inProgressTasks: [],
-    completedTasks: []
-  },
+  tasks: [],
   loading: false,
   error: null,
   taskUpdated: false
@@ -47,11 +43,20 @@ export const updateTask = createAsyncThunk(
   "tasks/updateTask",
   async ({ id, updates }) => {
     console.log("Updates",updates)
-    const response = await axios.patch(`${API_URL}/api/tasks/${id}`, updates);
+    const response = await axios.patch(`${API_URL}/api/tasks/update/${id}`, updates);
     return response.data;
   }
 );
 
+
+export const reOrderTask = createAsyncThunk(
+  "tasks/reOrderTask",
+  async ({ id, updates }) => {
+    console.log("Updates",updates)
+    const response = await axios.patch(`${API_URL}/api/tasks/reorder/${id}`, updates);
+    return response.data;
+  }
+);
 
 const tasksSlice = createSlice({
   name: "tasks",
@@ -59,7 +64,7 @@ const tasksSlice = createSlice({
   reducers: {
     setTaskUpdated: (state, action) => {
       state.taskUpdated = action.payload;
-    },
+    }, 
   },
   extraReducers: (builder) => {
     builder
@@ -118,6 +123,21 @@ const tasksSlice = createSlice({
 
       })
       .addCase(updateTask.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error.message;
+      })
+      .addCase(reOrderTask.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(reOrderTask.fulfilled, (state) => {
+        /* const index = state.tasks.findIndex((t) => t.id === action.payload.id);
+        if (index !== -1) {
+          state.tasks[index] = action.payload;
+        } */
+        state.taskUpdated = true;
+
+      })
+      .addCase(reOrderTask.rejected, (state, action) => {
         state.loading = false;
         state.error = action.error.message;
       })

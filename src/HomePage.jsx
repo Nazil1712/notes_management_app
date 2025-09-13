@@ -4,20 +4,25 @@ import Board from "./Board";
 
 const HomePage = () => {
   return (
-      <div className="flex">
-        {/* Sidebar */}
+      <div className="flex h-screen overflow-hidden">
+      {/* Sidebar */}
+      <div className="fixed left-0 top-0 h-full w-18 z-20">
         <Sidebar />
-  
-        {/* Main Section */}
-        <div className="flex-1">
+      </div>
+
+      {/* Main Section */}
+      <div className="flex-1 ml-18 flex flex-col">
+        {/* Header */}
+        <div className="sticky top-0 z-10">
           <Header />
-  
-          {/* Board */}
-          <div className="">
-            <Board/>
-          </div>
+        </div>
+
+        {/* Scrollable Content (Kanban board) */}
+        <div className="flex-1 overflow-y-auto ">
+          <Board />
         </div>
       </div>
+    </div>
     );
 }
 

@@ -1,5 +1,11 @@
 import { useState } from "react";
+import {
+  SortableContext,
+  verticalListSortingStrategy,
+} from "@dnd-kit/sortable";
 import TaskCard from "./TaskCard";
+import TaskForm from "./app/TaskForm";
+import { useDroppable } from "@dnd-kit/core";
 
 const dotsByStatus = {
   "To Do": "bg-button-blue rounded-full w-2 h-2",
@@ -7,9 +13,18 @@ const dotsByStatus = {
   Completed: "bg-green rounded-full w-2 h-2",
 };
 
-
-const Column = ({ title, tasks, openDropdownId, onToggle, setOpenDropdownId }) => {
+const Column = ({
+  title,
+  droppableId,
+  tasks,
+  openDropdownId,
+  onToggle,
+  setOpenDropdownId,
+}) => {
   const [showForm, setShowForm] = useState(false);
+
+  const { setNodeRef } = useDroppable({ id: droppableId });
+
 
   return (
     <>
@@ -32,19 +47,27 @@ const Column = ({ title, tasks, openDropdownId, onToggle, setOpenDropdownId }) =
             />
           </span>
         </div>
-        <div className="space-y-4">
-          {tasks.map((t) => (
-            <TaskCard
-              key={t.id}
-              task={t}
-              isOpen={openDropdownId === t.id}
-              onToggle={() => onToggle(t.id)}
-              setOpenDropdownId={setOpenDropdownId}
-            />
-          ))}
+        <div ref={setNodeRef}>
+          <SortableContext
+            items={tasks.map((t) => t.id)}
+            strategy={verticalListSortingStrategy}
+          >
+            <div className="space-y-4">
+              {tasks.map((t, index) => (
+                <TaskCard
+                  key={t.id}
+                  task={t}
+                  index={index}
+                  isOpen={openDropdownId === t.id}
+                  onToggle={() => onToggle(t.id)}
+                  setOpenDropdownId={setOpenDropdownId}
+                  column={title}
+                />
+              ))}
+            </div>
+          </SortableContext>
         </div>
       </div>
-
       {/* Popup Modal for Task Form */}
       {showForm && (
         <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
@@ -61,6 +84,5 @@ const Column = ({ title, tasks, openDropdownId, onToggle, setOpenDropdownId }) =
     </>
   );
 };
-
 
 export default Column;

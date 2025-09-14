@@ -1,24 +1,23 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchAllTasks, reOrderTask, updateTask } from "./app/tasks/taskSlice";
-import Column from "./Column";
 import { closestCorners, DndContext } from "@dnd-kit/core";
 import { arrayMove } from "@dnd-kit/sortable";
+import KanbanBoard from "./KanbanBoard";
+import RowView from "./RowView";
 
-export default function Board() {
+export default function Board({view}) {
   const dispatch = useDispatch();
-  const [openDropdownId, setOpenDropdownId] = useState(null);
   const [activeId, setActiveId] = useState(null);
 
-  const handleToggle = (id) => {
-    setOpenDropdownId((prev) => (prev === id ? null : id));
-  };
   const tasks = useSelector((state) => state.tasks.tasks);
   const taskUpdated = useSelector((state) => state.tasks.taskUpdated);
 
   // console.log(tasks)
 
   const [containers, setContainers] = useState(tasks);
+
+  console.log("Containers", containers)
 
   // console.log("tasks", tasks);
 
@@ -232,19 +231,9 @@ export default function Board() {
           collisionDetection={closestCorners}
         >
           <div className="bg-white p-7">
-            <div className="grid gap-4 md:grid-cols-3">
-              {containers.map((container) => (
-                <Column
-                  key={container.id}
-                  title={container.title}
-                  droppableId={container.id}
-                  tasks={container.tasks}
-                  openDropdownId={openDropdownId}
-                  onToggle={handleToggle}
-                  setOpenDropdownId={setOpenDropdownId}
-                />
-              ))}
-            </div>
+            {view == 'list' ? <KanbanBoard containers={containers}/> : 
+            view == 'row' ? <RowView /> : <h1>Coming Soon....</h1> }
+            
           </div>
         </DndContext>
       )}

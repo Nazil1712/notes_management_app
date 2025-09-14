@@ -9,7 +9,7 @@ import {
 } from "lucide-react";
 import { useState } from "react";
 
-export default function Header() {
+export default function Header({ selected, setSelected }) {
   const views = [
     { id: "grid", label: "Grid View", icon: <img src="/Grid.png" alt="" /> },
     { id: "list", label: "List View", icon: <img src="/List.png" alt="" /> },
@@ -27,7 +27,7 @@ export default function Header() {
     { id: "sort", label: "Sort", icon: <img src="/Sort.png" alt="" /> },
   ];
 
-  const [selected, setSelected] = useState("list");
+  // const [selected, setSelected] = useState("list");
 
   const avatarsList = [
     "/avatar-39.png",

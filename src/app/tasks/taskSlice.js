@@ -7,6 +7,7 @@ const API_URL = import.meta.env.VITE_API_URL;
 
 const initialState = {
   tasks: [],
+  rowViewTasks: [],
   loading: false,
   error: null,
   taskUpdated: false
@@ -75,7 +76,8 @@ const tasksSlice = createSlice({
       })
       .addCase(fetchAllTasks.fulfilled, (state, action) => {
         state.loading = false;
-        state.tasks = action.payload;
+        state.tasks = action.payload.kanbanView;
+        state.rowViewTasks = action.payload.rowView;
       })
       .addCase(fetchAllTasks.rejected, (state, action) => {
         state.loading = false;

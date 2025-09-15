@@ -43,7 +43,7 @@ export default function Header({ selected, setSelected }) {
     <div className="w-full border-b border-gray-300 ">
       {/* Top row: Breadcrumb + Search + Avatars + Invite */}
       <div className="bg-light-background-color">
-        <div className="flex items-center justify-between px-6 py-3">
+        <div className="hidden md:flex items-center justify-between px-6 py-3">
           {/* Breadcrumb */}
           <div className="flex items-center space-x-1 text-sm text-gray-500 gap-2">
             <span className="flex items-center space-x-1 gap-2">
@@ -74,6 +74,7 @@ export default function Header({ selected, setSelected }) {
               Project PlanetX
             </span>
           </div>
+          
 
           {/* Right Side */}
           <div className="flex items-center space-x-4">
@@ -130,7 +131,7 @@ export default function Header({ selected, setSelected }) {
                   <button
                     key={id}
                     onClick={() => setSelected(id)}
-                    className={`flex items-center gap-2 px-4 py-2 rounded-full transition-all
+                    className={`flex items-center gap-2 px-4 py-2 rounded-full transition-all cursor-pointer
                             ${
                               selected === id
                                 ? "bg-white shadow h-8 rounded-full"

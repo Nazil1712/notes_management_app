@@ -39,7 +39,7 @@ export default function Sidebar() {
         <button className="p-2 hover:bg-indigo-100 rounded-lg">
           <img src="/Settings.png" alt="" />
         </button>
-        <img src="/avatar-40.png" alt="User" className="h-10 w-10 rounded-full border" />
+        {/* <img src="/avatar-40.png" alt="User" className="h-10 w-10 rounded-full border" /> */}
       </div>
     </div>
   );

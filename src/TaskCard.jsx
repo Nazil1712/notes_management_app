@@ -15,7 +15,7 @@ import {
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 
-const Tag = ({ label }) => {
+export const Tag = ({ label }) => {
   const colors = {
     Important: "bg-green-100 text-green-600 font-semibold",
     Meh: "bg-indigo-50 text-indigo-600 font-semibold",
@@ -34,11 +34,9 @@ const Tag = ({ label }) => {
 
 export default function TaskCard({
   task,
-  index,
   isOpen,
   onToggle,
   setOpenDropdownId,
-  column,
 }) {
   const [showPopUp, setShowPopUp] = useState(null);
   const [showForm, setShowForm] = useState(false);
@@ -53,7 +51,6 @@ export default function TaskCard({
     isDragging,
   } = useSortable({
     id: task.id,
-    // data: { column, sortable: { index } },
   });
 
   const style = {
@@ -100,7 +97,7 @@ export default function TaskCard({
         {...attributes}
         className={`bg-white p-4 rounded-2xl shadow-sm border space-y-3 ${
           isDragging
-            ? "relative z-[9999] border-2 border-green-500 bg-white shadow-md"
+            ? "relative opacity-50 bg-white shadow-md"
             : "bg-white"
         }`}
       >

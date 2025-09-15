@@ -27,15 +27,16 @@ export const addTask = createAsyncThunk(
   async (taskData) => {
     // console.log(taskData)
     const response = await axios.post(`${API_URL}/api/tasks`, taskData);
-  return response.data;
+    return response.data;
   }
 );
 
 export const deleteTask = createAsyncThunk(
   "tasks/deleteTask", 
   async (id) => {
-    await axios.delete(`${API_URL}/api/tasks/${id}`);
-    return id;
+    const response = await axios.delete(`${API_URL}/api/tasks/${id}`);
+    // console.log(`Delete Response => ${response}`)
+    return response.data;
   }
 ); 
 
@@ -86,15 +87,15 @@ const tasksSlice = createSlice({
       .addCase(addTask.pending, (state) => {
         state.loading = true;
       })
-      .addCase(addTask.fulfilled, (state, action) => {
-        const newTask = action.payload;
+      .addCase(addTask.fulfilled, (state) => {
+        /* const newTask = action.payload;
         if (newTask.status === "To Do") {
           state.tasks.toDoTasks.push(newTask);
         } else if (newTask.status === "In Progress") {
           state.tasks.inProgressTasks.push(newTask);
         } else if (newTask.status === "Completed") {
           state.tasks.completedTasks.push(newTask);
-        }
+        } */
 
         state.taskUpdated = true;
       })

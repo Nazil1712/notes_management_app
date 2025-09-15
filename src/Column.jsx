@@ -61,11 +61,12 @@ const Column = ({
                   isOpen={openDropdownId === t.id}
                   onToggle={() => onToggle(t.id)}
                   setOpenDropdownId={setOpenDropdownId}
-                  column={title}
                 />
               ))}
             </div>
           </SortableContext>
+
+          
         </div>
       </div>
       {/* Popup Modal for Task Form */}

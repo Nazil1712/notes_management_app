@@ -6,9 +6,13 @@ import {
   verticalListSortingStrategy,
 } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
-import { GripHorizontal } from "lucide-react";
+import { GripHorizontal, Pencil, Plus, Trash } from "lucide-react";
 import { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { deleteTask, fetchAllTasks, updateTask } from "./app/tasks/taskSlice";
+import { Tag } from "./TaskCard";
+import TaskForm from "./app/TaskForm";
+import PopupBox from "./common/PopupBox";
 
 const SortableItem = ({ task }) => {
   const {
@@ -23,6 +27,21 @@ const SortableItem = ({ task }) => {
   const style = {
     transform: CSS.Transform.toString(transform),
     transition,
+  };
+
+  const [value, setValue] = useState(task.status);
+  const [showForm, setShowForm] = useState(false);
+  const [showPopUp, setShowPopUp] = useState(null);
+
+  const dispatch = useDispatch();
+
+  const handleStatusChange = (id, newStatus) => {
+    setValue(newStatus);
+    dispatch(updateTask({ id, updates: { status: newStatus } }));
+  };
+
+  const handleDelete = (id) => {
+    dispatch(deleteTask(id));
   };
 
   return (
@@ -44,22 +63,40 @@ const SortableItem = ({ task }) => {
       <div className="truncate font-medium">{task.title}</div>
 
       {/* Tag */}
-      <div className="text-gray-600">{task.tag}</div>
+      <div>
+        <Tag label={task.tag} />
+      </div>
+      {/* <div className="text-gray-600">{task.tag}</div> */}
 
       {/* Status */}
       <div>
-        <span
-          className={`px-2 py-1 rounded text-xs font-medium
+        <select
+          value={task.status}
+          onChange={(e) => handleStatusChange(task.id, e.target.value)}
+          className={`px-2 py-1 text-xs font-medium rounded border border-gray-300 focus:outline-none focus:ring-indigo-500 focus:ring-0
                   ${
                     task.status === "In Progress"
                       ? "bg-blue-100 text-blue-700"
-                      : task.status === "Completed"
+                      : ""
+                  }
+                  ${
+                    task.status === "Completed"
                       ? "bg-green-100 text-green-700"
-                      : "bg-gray-100 text-gray-700"
-                  }`}
+                      : ""
+                  }
+                  ${task.status === "To Do" ? "bg-gray-100 text-gray-700" : ""}
+                  `}
         >
-          {task.status}
-        </span>
+          <option value="To Do" className="bg-gray-100 text-gray-700">
+            To Do
+          </option>
+          <option value="In Progress" className="bg-blue-100 text-blue-700">
+            In Progress
+          </option>
+          <option value="Completed" className="bg-green-100 text-green-700">
+            Completed
+          </option>
+        </select>
       </div>
 
       {/* Progress */}
@@ -81,21 +118,61 @@ const SortableItem = ({ task }) => {
       <div className="text-gray-600">{task.views}</div>
 
       {/* Assignees (avatars) */}
-      <div className="flex -space-x-2">
-        {task.images.slice(0, 4).map((img, i) => (
-          <img
-            key={i}
-            src={`/${img}`}
-            alt="user"
-            className="h-7 w-7 rounded-full border-2 border-white"
-          />
-        ))}
-        {task.images.length > 4 && (
-          <div className="h-7 w-7 flex items-center justify-center rounded-full border-2 border-white bg-indigo-50 text-xs font-medium text-indigo-600">
-            +{task.images.length - 4}
+      <div className="flex justify-between">
+        <div className="flex -space-x-2">
+          {task.images.slice(0, 4).map((img, i) => (
+            <img
+              key={i}
+              src={`/${img}`}
+              alt="user"
+              className="h-7 w-7 rounded-full border-2 border-white"
+            />
+          ))}
+          {task.images.length > 4 && (
+            <div className="h-7 w-7 flex items-center justify-center rounded-full border-2 border-white bg-indigo-50 text-xs font-medium text-indigo-600">
+              +{task.images.length - 4}
+            </div>
+          )}
+        </div>
+
+        <div className=" flex">
+          <div
+            className="hover:bg-gray-200 cursor-pointer p-2 rounded-4xl"
+            onClick={() => setShowForm(true)}
+          >
+            <Pencil size={20} />
           </div>
-        )}
+          <div
+            className="hover:bg-gray-200 cursor-pointer p-2 rounded-4xl"
+            onClick={() => setShowPopUp(task.id)}
+          >
+            <Trash size={20} />
+          </div>
+        </div>
       </div>
+      {showForm && (
+        <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
+          <div className="bg-white rounded-xl shadow-lg p-6 w-[70%] max-w-md">
+            <TaskForm
+              mode="update"
+              onCancel={() => setShowForm(false)}
+              setShowForm={setShowForm}
+              title={task.title}
+              taskData={task}
+            />
+          </div>
+        </div>
+      )}
+
+      <PopupBox
+        title={`Delete ${task.title} ?`}
+        message={`Do you really want to delete this task? After deleting, you won’t be able to see this task again!`}
+        dangerOption={"Delete"}
+        cancelOption={"Cancel"}
+        dangerAction={() => handleDelete(task.id)}
+        cancleAction={() => setShowPopUp(-1)}
+        showPopUp={showPopUp === task.id}
+      />
     </div>
   );
 };
@@ -103,14 +180,21 @@ const SortableItem = ({ task }) => {
 export default function RowView() {
   const [activeId, setActiveId] = useState(null);
   const tasksData = useSelector((state) => state.tasks.rowViewTasks);
+  const taskUpdated = useSelector((state) => state.tasks.taskUpdated);
+  const dispatch = useDispatch();
 
   const [tasks, setTasks] = useState(tasksData);
+  const [showForm, setShowForm] = useState(false);
 
   useEffect(() => {
     if (tasksData.length != 0) {
       setTasks(tasksData);
     }
   }, [tasksData]);
+
+  useEffect(() => {
+    dispatch(fetchAllTasks());
+  }, [dispatch, taskUpdated]);
 
   const handleDragStart = (e) => {
     setActiveId(e.active.id);
@@ -135,61 +219,87 @@ export default function RowView() {
     setActiveId(null);
   };
 
-  const getActiveItem = () =>{
-    return tasks.find((task)=>task.id===activeId)?.title
-  }
+  const getActiveItem = () => {
+    return tasks.find((task) => task.id === activeId)?.title;
+  };
 
   return (
-    <div className="w-full border rounded-md overflow-hidden">
-      {/* Header */}
-      <div className="grid grid-cols-[0.3fr_2fr_1fr_1fr_1fr_1fr_1fr_1fr] bg-gray-100 text-sm font-semibold px-4 py-2 border-b">
-        <div></div>
-        <div>Title</div>
-        <div>Tag</div>
-        <div>Status</div>
-        <div>Progress</div>
-        <div>Comments</div>
-        <div>Views</div>
-        <div>Assignees</div>
-      </div>
-
-      {/* Rows */}
-      <DndContext
-        onDragStart={handleDragStart}
-        onDragEnd={handleDragEnd}
-        collisionDetection={closestCenter}
-        onDragCancel={handleDragCancel}
+    <>
+      <button
+        onClick={() => setShowForm(true)}
+        className="cursor-pointer flex gap-2 font-medium bg-gray-200 rounded-sm p-1 mb-5 px-2
+         hover:bg-gray-300 hover:text-gray-800 group"
       >
-        <SortableContext
-          items={tasks.map((task) =>  task.id)}
-          strategy={verticalListSortingStrategy}
+        Add Task
+        <div className="transition-transform duration-300 transform group-hover:rotate-90">
+          <Plus />
+        </div>
+      </button>
+      <div className="w-full border rounded-md overflow-hidden">
+        {/* Header */}
+        <div className="grid grid-cols-[0.3fr_2fr_1fr_1fr_1fr_1fr_1fr_1fr] bg-gray-100 text-sm font-semibold px-4 py-2 border-b">
+          <div></div>
+          <div>Title</div>
+          <div>Tag</div>
+          <div>Status</div>
+          <div>Progress</div>
+          <div>Comments</div>
+          <div>Views</div>
+          <div>Assignees</div>
+        </div>
+
+        {/* Rows */}
+        <DndContext
+          onDragStart={handleDragStart}
+          onDragEnd={handleDragEnd}
+          collisionDetection={closestCenter}
+          onDragCancel={handleDragCancel}
         >
-          <div>
-            {tasks.map((task) => (
-              <SortableItem task={task} />
-            ))}
-          </div>
-        </SortableContext>
-        <DragOverlay
+          <SortableContext
+            items={tasks.map((task) => task.id)}
+            strategy={verticalListSortingStrategy}
+          >
+            <div>
+              {tasks.map((task) => (
+                <SortableItem key={task.id} task={task} />
+              ))}
+            </div>
+          </SortableContext>
+          <DragOverlay
             adjustScale={true}
             dropAnimation={{
               duration: 150,
               easing: "cubic-bezier(0.18, 0.67, 0.6, 1.22)",
             }}
           >
-
-          {activeId ? (
-            <div className="cursor-grabbing rounded-md border-2 bg-white border-indigo-500 p-4 shadow-md 
-            w-[70%]">
-              <div className="flex items-center gap-4">
-                <span className="text-gray-500"><GripHorizontal/></span>
-                <span className="text-gray-500">{getActiveItem()}</span>
+            {activeId ? (
+              <div
+                className="cursor-grabbing rounded-md border-2 bg-white border-indigo-500 p-4 shadow-md 
+            w-[50%]"
+              >
+                <div className="flex items-center gap-4">
+                  <span className="text-gray-500">
+                    <GripHorizontal />
+                  </span>
+                  <span className="text-gray-500">{getActiveItem()}</span>
+                </div>
               </div>
-            </div>
-          ) : null}
-
+            ) : null}
           </DragOverlay>
-      </DndContext>
-    </div>
+        </DndContext>
+      </div>
+      {showForm && (
+        <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
+          <div className="bg-white rounded-xl shadow-lg p-6 w-[70%] max-w-md">
+            <TaskForm
+              mode="create"
+              onCancel={() => setShowForm(false)}
+              setShowForm={setShowForm}
+              title={"To Do"}
+            />
+          </div>
+        </div>
+      )}
+    </>
   );
 }

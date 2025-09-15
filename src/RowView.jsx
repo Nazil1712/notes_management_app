@@ -9,7 +9,12 @@ import { CSS } from "@dnd-kit/utilities";
 import { GripHorizontal, Pencil, Plus, Trash } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { deleteTask, fetchAllTasks, updateTask } from "./app/tasks/taskSlice";
+import {
+  deleteTask,
+  fetchAllTasks,
+  reOrderRowPosition,
+  updateTask,
+} from "./app/tasks/taskSlice";
 import { Tag } from "./TaskCard";
 import TaskForm from "./app/TaskForm";
 import PopupBox from "./common/PopupBox";
@@ -104,9 +109,13 @@ const SortableItem = ({ task }) => {
         <div className="w-full bg-gray-200 rounded-full h-2">
           <div
             className={`h-2 rounded-full ${
-              task.progress === 100 ? "bg-green-500" : "bg-blue-500"
+              task.status == "Completed"
+                ? "bg-green"
+                : task.status == "To Do"
+                ? "bg-button-blue"
+                : "bg-orange"
             }`}
-            style={{ width: `${task.progress}%` }}
+            style={{ width: `${task.progress == 0 ? 4 : task.progress}%` }}
           ></div>
         </div>
       </div>
@@ -140,13 +149,13 @@ const SortableItem = ({ task }) => {
             className="hover:bg-gray-200 cursor-pointer p-2 rounded-4xl"
             onClick={() => setShowForm(true)}
           >
-            <Pencil size={20} />
+            <Pencil size={20} color="#007bff"/>
           </div>
           <div
             className="hover:bg-gray-200 cursor-pointer p-2 rounded-4xl"
             onClick={() => setShowPopUp(task.id)}
           >
-            <Trash size={20} />
+            <Trash size={20} color="#ff3333"/>
           </div>
         </div>
       </div>
@@ -190,7 +199,7 @@ export default function RowView() {
     if (tasksData.length != 0) {
       setTasks(tasksData);
     }
-  }, [tasksData]);
+  }, [tasksData, taskUpdated]);
 
   useEffect(() => {
     dispatch(fetchAllTasks());
@@ -211,6 +220,15 @@ export default function RowView() {
       const oldIndex = tasks.findIndex((item) => item.id === active.id);
       const newIndex = tasks.findIndex((item) => item.id === over.id);
 
+      console.log("Active Id ==>", active.id);
+      console.log("over Id ==>", over.id);
+      console.log("Old Index ==> ", oldIndex);
+      console.log("New Index ==> ", newIndex);
+
+      dispatch(
+        reOrderRowPosition({ id: active.id, updates: { oldIndex, newIndex } })
+      );
+
       return arrayMove(tasks, oldIndex, newIndex);
     });
   };
@@ -225,16 +243,25 @@ export default function RowView() {
 
   return (
     <>
-      <button
-        onClick={() => setShowForm(true)}
-        className="cursor-pointer flex gap-2 font-medium bg-gray-200 rounded-sm p-1 mb-5 px-2
-         hover:bg-gray-300 hover:text-gray-800 group"
-      >
-        Add Task
-        <div className="transition-transform duration-300 transform group-hover:rotate-90">
-          <Plus />
+      <div className="flex items-baseline mb-5 gap-5">
+        <div className="flex items-center gap-2 bg-gray-200 p-1 px-2 rounded-sm">
+          <h2 className="font-extrabold text-xl">Total Tasks</h2>
+          <p className="font-bold text-xl text-gray-500">({tasks.length})</p>
         </div>
-      </button>
+        <div>
+          <button
+            onClick={() => setShowForm(true)}
+            className="cursor-pointer flex gap-2 font-medium bg-gray-200 rounded-sm p-1 px-2
+          hover:bg-gray-300 hover:text-gray-800 group"
+          >
+            Add Task
+            <div className="transition-transform duration-300 transform group-hover:rotate-90">
+              <Plus />
+            </div>
+          </button>
+        </div>
+      </div>
+
       <div className="w-full border rounded-md overflow-hidden">
         {/* Header */}
         <div className="grid grid-cols-[0.3fr_2fr_1fr_1fr_1fr_1fr_1fr_1fr] bg-gray-100 text-sm font-semibold px-4 py-2 border-b">
@@ -243,7 +270,7 @@ export default function RowView() {
           <div>Tag</div>
           <div>Status</div>
           <div>Progress</div>
-          <div>Comments</div>
+          <div className="ml-14">Comments</div>
           <div>Views</div>
           <div>Assignees</div>
         </div>

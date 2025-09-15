@@ -60,6 +60,15 @@ export const reOrderTask = createAsyncThunk(
   }
 );
 
+export const reOrderRowPosition = createAsyncThunk(
+  "tasks/reOrderRowPosition",
+  async ({ id, updates }) => {
+    console.log("Id and updates",id,updates)
+    const response = await axios.patch(`${API_URL}/api/tasks/reorder-row-position/${id}`, updates);
+    return response.data;
+  }
+);
+
 const tasksSlice = createSlice({
   name: "tasks",
   initialState,
@@ -141,6 +150,21 @@ const tasksSlice = createSlice({
 
       })
       .addCase(reOrderTask.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error.message;
+      })
+      .addCase(reOrderRowPosition.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(reOrderRowPosition.fulfilled, (state) => {
+        /* const index = state.tasks.findIndex((t) => t.id === action.payload.id);
+        if (index !== -1) {
+          state.tasks[index] = action.payload;
+        } */
+        state.taskUpdated = true;
+
+      })
+      .addCase(reOrderRowPosition.rejected, (state, action) => {
         state.loading = false;
         state.error = action.error.message;
       })

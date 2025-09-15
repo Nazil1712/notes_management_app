@@ -148,9 +148,9 @@ export default function TaskCard({
                   >
                     <Trash size={20} /> Delete Task
                   </li>
-                  <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer flex gap-2">
+                  {/* <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer flex gap-2">
                     <ArrowLeftRight size={20} /> Move To
-                  </li>
+                  </li> */}
                 </ul>
               </div>
             )}

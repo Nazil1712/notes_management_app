@@ -7,26 +7,41 @@ const HomePage = () => {
   const [view, setView] = useState("list");
 
   return (
-      <div className="flex h-screen overflow-hidden">
-      {/* Sidebar */}
-      <div className="fixed left-0 top-0 h-full w-18 z-20">
-        <Sidebar />
-      </div>
+    <>
 
-      {/* Main Section */}
-      <div className="flex-1 ml-18 flex flex-col">
-        {/* Header */}
-        <div className="sticky top-0 z-10">
-          <Header selected={view} setSelected={setView}/>
+      {/* Desktop View */}
+      <div className="hidden md:flex h-screen overflow-hidden">
+        {/* Sidebar */}
+        <div className="w-18 md:fixed md:left-0 md:top-0 md:h-full md:z-20">
+          <Sidebar />
         </div>
 
-        {/* Scrollable Content (Kanban board) */}
-        <div className="flex-1 overflow-y-auto ">
+        {/* Main Section */}
+        <div className="flex-1 md:ml-18 flex flex-col">
+          {/* Header */}
+          <div className="relative md:sticky md:top-0 md:z-10">
+            <Header selected={view} setSelected={setView} />
+          </div>
+
+          {/* Scrollable Content (Kanban board) */}
+          <div className="flex-1 overflow-y-auto">
+            <Board view={view} />
+          </div>
+        </div>
+      </div>
+
+      {/* Mobile View */}
+      <div className="flex md:hidden">
+        <div>
+          <div>
+            <Sidebar />
+          </div>
+          <Header selected={view} setSelected={setView} />
           <Board view={view} />
         </div>
       </div>
-    </div>
-    );
-}
+    </>
+  );
+};
 
 export default HomePage;

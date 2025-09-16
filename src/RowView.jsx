@@ -55,7 +55,7 @@ const SortableItem = ({ task }) => {
       style={style}
       ref={setNodeRef}
       {...attributes}
-      className={`grid grid-cols-[0.3fr_2fr_1fr_1fr_1fr_1fr_1fr_1fr] items-center px-4 py-2 border-b text-sm hover:bg-gray-50 ${
+      className={`grid grid-cols-[0.3fr_2fr_1fr_1fr_1fr_1fr_1fr_2fr] items-center px-4 py-2 border-b text-sm hover:bg-gray-50 ${
         isDragging ? "z-40 opacity-50 bg-white shadow-md" : "bg-white"
       }`}
     >
@@ -134,11 +134,11 @@ const SortableItem = ({ task }) => {
               key={i}
               src={`/${img}`}
               alt="user"
-              className="h-7 w-7 rounded-full border-2 border-white"
+              className="h-8 w-8 rounded-full border-2 border-white"
             />
           ))}
           {task.images.length > 4 && (
-            <div className="h-7 w-7 flex items-center justify-center rounded-full border-2 border-white bg-indigo-50 text-xs font-medium text-indigo-600">
+            <div className="h-8 w-8 flex items-center justify-center rounded-full border-2 border-white bg-indigo-50 text-xs font-medium text-indigo-600">
               +{task.images.length - 4}
             </div>
           )}
@@ -199,7 +199,7 @@ export default function RowView() {
     if (tasksData.length != 0) {
       setTasks(tasksData);
     }
-  }, [tasksData, taskUpdated]);
+  }, [tasksData]);
 
   useEffect(() => {
     dispatch(fetchAllTasks());
@@ -264,13 +264,13 @@ export default function RowView() {
 
       <div className="w-full border rounded-md overflow-hidden">
         {/* Header */}
-        <div className="grid grid-cols-[0.3fr_2fr_1fr_1fr_1fr_1fr_1fr_1fr] bg-gray-100 text-sm font-semibold px-4 py-2 border-b">
+        <div className="grid grid-cols-[0.3fr_2fr_1fr_1fr_1fr_1fr_1fr_2fr] bg-gray-100 text-sm font-semibold px-4 py-2 border-b">
           <div></div>
           <div>Title</div>
           <div>Tag</div>
           <div>Status</div>
           <div>Progress</div>
-          <div className="ml-14">Comments</div>
+          <div className="ml-10">Comments</div>
           <div>Views</div>
           <div>Assignees</div>
         </div>

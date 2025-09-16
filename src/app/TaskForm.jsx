@@ -144,13 +144,13 @@ export default function TaskForm({
         <button
           type="button"
           onClick={onCancel}
-          className="px-4 py-2 rounded-4xl border bg-white hover:bg-gray-50"
+          className="px-4 py-2 rounded-4xl border bg-white hover:bg-gray-50 cursor-pointer"
         >
           Cancel
         </button>
         <button
           type="submit"
-          className="px-4 py-2 rounded-4xl bg-button-blue text-white hover:bg-indigo-700"
+          className="px-4 py-2 rounded-4xl bg-button-blue text-white hover:bg-indigo-700 cursor-pointer"
         >
           {mode === "create" ? "Create Task" : "Save Changes"}
         </button>

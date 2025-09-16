@@ -17,6 +17,11 @@
     --font-display: "Plus Jakarta Sans", sans-serif;
 }
 
+
+.no-scrollbar::-webkit-scrollbar {
+    display: none;
+}
+
 .box {
     background: rgba(79, 70, 229, 1);
     border: 0.5px solid rgba(255, 255, 255, 0.32);

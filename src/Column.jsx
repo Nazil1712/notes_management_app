@@ -28,7 +28,7 @@ const Column = ({
 
   return (
     <>
-      <div className="w-[29vw] flex-shrink-0 bg-background-card-background p-4 rounded-xl border border-gray-200">
+      <div className=" w-[90vw] md:w-[29vw] flex-shrink-0 bg-background-card-background p-4 rounded-xl border border-gray-200">
         <div className="flex justify-between items-center mb-4">
           <div className="flex items-center gap-2">
             <p className={`${dotsByStatus[title]}`}></p>

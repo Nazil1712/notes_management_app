@@ -1,6 +1,8 @@
 import { Home, BarChart, Folder, Zap, Bell, Settings, Menu } from "lucide-react";
 import { useState } from "react";
 import MobileNav from "./MobileNav";
+import { useDispatch } from "react-redux";
+import { setNavOpen } from "./app/tasks/taskSlice";
 
 export default function Sidebar() {
   const navItems = [
@@ -14,9 +16,11 @@ export default function Sidebar() {
 
 
   const [open, setOpen] = useState(false);
+  const dispatch = useDispatch();
   
   const handleMenu = () => {
     setOpen(!open);
+    dispatch(setNavOpen(!open))
   };
 
   return (

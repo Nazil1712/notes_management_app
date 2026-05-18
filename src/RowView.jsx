@@ -78,7 +78,7 @@ const SortableItem = ({ task }) => {
         <select
           value={task.status}
           onChange={(e) => handleStatusChange(task.id, e.target.value)}
-          className={`px-2 py-1 text-xs font-medium rounded border border-gray-300 focus:outline-none focus:ring-indigo-500 focus:ring-0
+          className={`px-2 py-1 text-xs font-medium rounded border border-gray-300 focus:outline-none focus:ring-indigo-500 focus:ring-0 cursor-pointer
                   ${
                     task.status === "In Progress"
                       ? "bg-blue-100 text-blue-700"
@@ -92,13 +92,13 @@ const SortableItem = ({ task }) => {
                   ${task.status === "To Do" ? "bg-gray-100 text-gray-700" : ""}
                   `}
         >
-          <option value="To Do" className="bg-gray-100 text-gray-700">
+          <option value="To Do" className="bg-gray-100 text-gray-700 cursor-pointer">
             To Do
           </option>
-          <option value="In Progress" className="bg-blue-100 text-blue-700">
+          <option value="In Progress" className="bg-blue-100 text-blue-700 cursor-pointer">
             In Progress
           </option>
-          <option value="Completed" className="bg-green-100 text-green-700">
+          <option value="Completed" className="bg-green-100 text-green-700 cursor-pointer">
             Completed
           </option>
         </select>

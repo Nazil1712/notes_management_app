@@ -10,7 +10,8 @@ const initialState = {
   rowViewTasks: [],
   loading: false,
   error: null,
-  taskUpdated: false
+  taskUpdated: false,
+  isNavOpen: false
 };
 
 // Fetch all tasks
@@ -76,6 +77,9 @@ const tasksSlice = createSlice({
     setTaskUpdated: (state, action) => {
       state.taskUpdated = action.payload;
     }, 
+    setNavOpen : (state, action)=>{
+      state.isNavOpen = action.payload;
+    }
   },
   extraReducers: (builder) => {
     builder
@@ -172,7 +176,7 @@ const tasksSlice = createSlice({
   },
 });
 
-export const {setTaskUpdated} = tasksSlice.actions;
+export const {setTaskUpdated,setNavOpen} = tasksSlice.actions;
 
 
 export default tasksSlice.reducer;

@@ -18,7 +18,7 @@ export default function TaskForm({
     defaultValues: {
       title: taskData.title ,
       tag: taskData.tag,
-      users: taskData.users,
+      // users: taskData.users,
       status: taskData.status || title,
       description: taskData.description,
     },
@@ -83,7 +83,7 @@ export default function TaskForm({
       </div>
 
       {/* Assignee */}
-      <div>
+      {/* <div>
         <label className="block text-sm font-medium">Users</label>
         <select
           {...register("users", { required: "Select an users" })}
@@ -96,7 +96,7 @@ export default function TaskForm({
         {errors.users && (
           <p className="text-xs text-red-500">{errors.users.message}</p>
         )}
-      </div>
+      </div> */}
 
       {/* Status */}
       <div>

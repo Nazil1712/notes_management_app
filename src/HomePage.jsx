@@ -2,13 +2,17 @@ import Sidebar from "./Sidebar";
 import Header from "./Header";
 import Board from "./Board";
 import { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 
 const HomePage = () => {
   const [view, setView] = useState("list");
 
+  const dispatch = useDispatch();
+
+  const isNavOpen = useSelector((state) => state.tasks.isNavOpen);
+
   return (
     <>
-
       {/* Desktop View */}
       <div className="hidden md:flex h-screen overflow-hidden">
         {/* Sidebar */}
@@ -37,7 +41,7 @@ const HomePage = () => {
             <Sidebar />
           </div>
           <Header selected={view} setSelected={setView} />
-          <Board view={view} />
+          {!isNavOpen && <Board view={view} />}
         </div>
       </div>
     </>

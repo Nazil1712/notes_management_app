@@ -1,11 +1,12 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchAllTasks, reOrderTask, updateTask } from "./app/tasks/taskSlice";
+import { fetchAllTasks, reOrderTask } from "./app/tasks/taskSlice";
 import { closestCorners, DndContext, DragOverlay } from "@dnd-kit/core";
 import { arrayMove } from "@dnd-kit/sortable";
 import KanbanBoard from "./KanbanBoard";
 import RowView from "./RowView";
 import TaskCard from "./TaskCard";
+import BoardShimmer from "./BoardShimmer";
 
 export default function Board({ view }) {
   const dispatch = useDispatch();
@@ -323,7 +324,7 @@ export default function Board({ view }) {
   return (
     <>
       {tasks.length == 0 ? (
-        "Loading"
+        <BoardShimmer view={view} />
       ) : (
         <DndContext
           onDragStart={handleDragStart}
